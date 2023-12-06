@@ -1,6 +1,6 @@
 const express = require("express");
 const userRouter = require("./routes/userRoute");
-const adminRouter = require("./routes/adminRoute")
+const adminRouter = require("./routes/adminRoute");
 const connectDB = require("./config/db");
 const dotenv = require("dotenv");
 const morgan = require("morgan");

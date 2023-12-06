@@ -7,7 +7,13 @@ const {
 
 const adminLoginPage = (req, res) => {
   if (!req.session.isAdmin) {
-    res.render("adminPages/adminLogin", { notAdmin: false, noUser: false });
+    res.render("adminPages/adminLogin", {
+      notAdmin: req.session.notAdmin,
+      noUser: req.session.noUser,
+    });
+    req.session.notAdmin = false;
+    req.session.noUser = false;
+    req.session.save();
   } else {
     res.redirect("/admin-dashboard");
   }
@@ -17,27 +23,40 @@ const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    if (email === "") {
+      req.session.notAdmin = false;
+      req.session.noUser = true;
+      return res.redirect("/admin-login");
+    }
+    if (password === "") {
+      req.session.notAdmin = false;
+      req.session.noUser = true;
+      return res.redirect("/admin-login");
+    }
+
     const foundUser = await UserModel.findOne({ email });
 
-    const matchPassword = await comparePassword(password, foundUser.password);
+    let matchPassword;
+
+    if (foundUser) {
+      matchPassword = await comparePassword(password, foundUser.password);
+    }
 
     if (!foundUser || !matchPassword) {
-      return res.render("adminPages/adminLogin", {
-        notAdmin: false,
-        noUser: true,
-      });
+      req.session.notAdmin = false;
+      req.session.noUser = true;
+      return res.redirect("/admin-login");
     }
 
     if (!foundUser.isAdmin) {
       req.session.isAdmin = false;
-      return res.render("adminPages/adminLogin", {
-        notAdmin: true,
-        noUser: false,
-      });
+      req.session.notAdmin = true;
+      req.session.noUser = false;
+      return res.redirect("/admin-login");
     } else {
       req.session.isAdmin = true;
       req.session.adminId = foundUser._id;
-      res.redirect("/admin-dashboard");
+      return res.redirect("/admin-dashboard");
     }
   } catch (error) {
     console.log("error in login", error);
@@ -165,9 +184,7 @@ const searchUser = async (req, res) => {
     const users = await UserModel.find({
       name: { $regex: search, $options: "i" },
     });
-
-    // $and: [{ name: { $regex: search } }, { isAdmin: false }],
-   res.render("adminPages/adminDashboard",{users})
+    res.render("adminPages/adminDashboard", { users });
   } catch (error) {
     console.log("error in searching ", error);
   }

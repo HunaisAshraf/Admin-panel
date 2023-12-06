@@ -91,9 +91,19 @@ const logIn = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    if(email == ""){
+      req.session.notValid = true;
+      res.redirect("/");
+    }
+    if(password == ""){
+      req.session.notValid = true;
+      res.redirect("/");
+    }
+
     const foundUser = await UserModel.findOne({ email });
 
     const passwordMatch = await comparePassword(password, foundUser.password);
+
     if (!foundUser || !passwordMatch) {
       req.session.notValid = true;
       res.redirect("/");
