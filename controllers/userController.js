@@ -91,11 +91,11 @@ const logIn = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if(email == ""){
+    if (email == "") {
       req.session.notValid = true;
       res.redirect("/");
     }
-    if(password == ""){
+    if (password == "") {
       req.session.notValid = true;
       res.redirect("/");
     }
@@ -118,9 +118,13 @@ const logIn = async (req, res) => {
 };
 
 const logOut = (req, res) => {
-  res.redirect("/");
   req.session.destroy();
+  res.redirect("/");
 };
+
+const getErrorPage = (req,res)=>{
+  res.render("userPages/error")
+}
 
 module.exports = {
   addUser,
@@ -129,4 +133,5 @@ module.exports = {
   getHome,
   logIn,
   logOut,
+  getErrorPage
 };
