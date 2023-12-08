@@ -23,6 +23,6 @@ router.get("/home", getHome);
 
 router.get("/logout", logOut);
 
-router.get("*",getErrorPage)
+
 
 module.exports = router;

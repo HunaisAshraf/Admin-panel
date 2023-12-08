@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const session = require("express-session");
 const nocache = require("nocache");
+const { getErrorPage } = require("./controllers/userController");
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.set("view engine", "ejs");
 //route
 app.use(userRouter);
 app.use(adminRouter);
+app.get("*", getErrorPage);
 
 const port = process.env.PORT || 3000;
 
