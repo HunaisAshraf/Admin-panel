@@ -32,5 +32,4 @@ router.post("/edit-user/:id", isAdmin, editUser);
 
 router.post("/search-user", isAdmin, searchUser);
 
-
 module.exports = router;

@@ -23,6 +23,4 @@ router.get("/home", getHome);
 
 router.get("/logout", logOut);
 
-
-
 module.exports = router;
