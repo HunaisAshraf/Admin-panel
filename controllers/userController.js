@@ -102,7 +102,11 @@ const logIn = async (req, res) => {
 
     const foundUser = await UserModel.findOne({ email });
 
-    const passwordMatch = await comparePassword(password, foundUser.password);
+    let passwordMatch;
+
+    if (foundUser) {
+      passwordMatch = await comparePassword(password, foundUser.password);
+    }
 
     if (!foundUser || !passwordMatch) {
       req.session.notValid = true;
@@ -122,9 +126,9 @@ const logOut = (req, res) => {
   res.redirect("/");
 };
 
-const getErrorPage = (req,res)=>{
-  res.render("userPages/error")
-}
+const getErrorPage = (req, res) => {
+  res.render("userPages/error");
+};
 
 module.exports = {
   addUser,
@@ -133,5 +137,5 @@ module.exports = {
   getHome,
   logIn,
   logOut,
-  getErrorPage
+  getErrorPage,
 };
