@@ -1,18 +1,5 @@
 const isAdmin = async (req, res, next) => {
   try {
-    // const { email } = req.body;
-
-    // const user = await UserModel.findOne({ email });
-
-    // if (!user.isAdmin) {
-    //   return res.render("adminPages/adminLogin", {
-    //     notAdmin: true,
-    //     noUser: false,
-    //   });
-    // } else {
-    //   next();
-    // }
-
     if (req.session.isAdmin) {
       next();
     }
@@ -44,3 +31,17 @@ module.exports = { isAdmin };
 //     console.log("error in signIn ", error);
 //   }
 // };
+
+
+// const { email } = req.body;
+
+    // const user = await UserModel.findOne({ email });
+
+    // if (!user.isAdmin) {
+    //   return res.render("adminPages/adminLogin", {
+    //     notAdmin: true,
+    //     noUser: false,
+    //   });
+    // } else {
+    //   next();
+    // }
